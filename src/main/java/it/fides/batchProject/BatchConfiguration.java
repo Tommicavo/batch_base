@@ -6,6 +6,7 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,20 @@ public class BatchConfiguration {
 	
 	@Autowired
 	private MyWriter myWriter;
+	
+	@Autowired
+	private MyProcessor myProcessor;
 
 	@Bean
     public FlatFileItemReader<PersonEntity> reader() {
 		return myReader.reader().build();
 	}
 	
+	@Bean
+	public ItemProcessor<PersonEntity, PersonEntity> processor(){
+		return myProcessor;
+	}
+	 
 	@Bean
     public ItemWriter<PersonEntity> writer() {
 		return myWriter;
@@ -43,10 +52,10 @@ public class BatchConfiguration {
     
     @Bean
     public Step step(JobRepository jobRepository, PlatformTransactionManager transactionManager, FlatFileItemReader<PersonEntity> reader) {
-        return new StepBuilder("step1", jobRepository)
+        return new StepBuilder("step", jobRepository)
           .<PersonEntity, PersonEntity> chunk(10, transactionManager)
           .reader(reader)
-          // .processor(processor()) not implemented yet 
+          .processor(myProcessor)
           .writer(myWriter)
           .build();
     }
