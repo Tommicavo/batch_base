@@ -11,7 +11,7 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
 @Component
-public class MyWriter implements ItemWriter<PersonEntity> {
+public class MyWriter implements ItemWriter<PdfModel> {
 	
 	@Value("${directory.output}")
 	private String dirOutput;
@@ -19,8 +19,8 @@ public class MyWriter implements ItemWriter<PersonEntity> {
 	public MyWriter() {}
 	
     @Override
-    public void write(Chunk<? extends PersonEntity> persons) throws Exception {
-        for (PersonEntity person : persons) {  
+    public void write(Chunk<? extends PdfModel> pdfs) throws Exception {
+        for (PdfModel pdf : pdfs) {  
         	
             File directory = new File(dirOutput);
             if (!directory.exists()) {
@@ -28,10 +28,10 @@ public class MyWriter implements ItemWriter<PersonEntity> {
             }
             
             Document document = new Document();
-            PdfWriter.getInstance(document, new FileOutputStream(dirOutput + person.getFirstName() + ".pdf"));
+            PdfWriter.getInstance(document, new FileOutputStream(dirOutput + pdf.getFirstName() + ".pdf"));
 
             document.open();
-            document.add(new Paragraph(person.getId() + " - " + person.getFirstName() + " " + person.getLastName()));
+            document.add(new Paragraph(pdf.toString()));
             document.close();
         }
     }

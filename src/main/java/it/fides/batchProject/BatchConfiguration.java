@@ -32,12 +32,12 @@ public class BatchConfiguration {
 	}
 	
 	@Bean
-	public ItemProcessor<PersonEntity, PersonEntity> processor(){
+	public ItemProcessor<PersonEntity, PdfModel> processor(){
 		return myProcessor;
 	}
 	 
 	@Bean
-    public ItemWriter<PersonEntity> writer() {
+    public ItemWriter<PdfModel> writer() {
 		return myWriter;
     }
 	
@@ -51,9 +51,10 @@ public class BatchConfiguration {
     }
     
     @Bean
-    public Step step(JobRepository jobRepository, PlatformTransactionManager transactionManager, FlatFileItemReader<PersonEntity> reader) {
+    public Step step(JobRepository jobRepository, PlatformTransactionManager transactionManager,
+    		FlatFileItemReader<PersonEntity> reader) {
         return new StepBuilder("step", jobRepository)
-          .<PersonEntity, PersonEntity> chunk(10, transactionManager)
+          .<PersonEntity, PdfModel> chunk(10, transactionManager)
           .reader(reader)
           .processor(myProcessor)
           .writer(myWriter)
