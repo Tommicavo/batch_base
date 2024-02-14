@@ -20,15 +20,14 @@ public class MyWriter implements ItemWriter<PdfModel> {
 	
     @Override
     public void write(Chunk<? extends PdfModel> pdfs) throws Exception {
-        for (PdfModel pdf : pdfs) {  
-        	
+        for (PdfModel pdf : pdfs) {
             File directory = new File(dirOutput);
             if (!directory.exists()) {
                 directory.mkdirs();
             }
             
             Document document = new Document();
-            PdfWriter.getInstance(document, new FileOutputStream(dirOutput + pdf.getFirstName() + ".pdf"));
+            PdfWriter.getInstance(document, new FileOutputStream(dirOutput + pdf.getId() + "_" + pdf.getFirstName() + ".pdf"));
 
             document.open();
             document.add(new Paragraph(pdf.toString()));

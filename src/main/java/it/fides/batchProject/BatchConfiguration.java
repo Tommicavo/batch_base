@@ -21,10 +21,10 @@ public class BatchConfiguration {
 	private MyReader myReader;
 	
 	@Autowired
-	private MyWriter myWriter;
+	private MyProcessor myProcessor;
 	
 	@Autowired
-	private MyProcessor myProcessor;
+	private MyWriter myWriter;
 
 	@Bean
     public FlatFileItemReader<PersonEntity> reader() {
@@ -35,7 +35,7 @@ public class BatchConfiguration {
 	public ItemProcessor<PersonEntity, PdfModel> processor(){
 		return myProcessor;
 	}
-	 
+	
 	@Bean
     public ItemWriter<PdfModel> writer() {
 		return myWriter;

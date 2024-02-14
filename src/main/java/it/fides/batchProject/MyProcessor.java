@@ -14,6 +14,7 @@ public class MyProcessor implements ItemProcessor<PersonEntity, PdfModel> {
     public PdfModel process(PersonEntity personEntity) throws Exception {
         PersonEntity person = personService.getPersonByEmail(personEntity.getEmail());
         PdfModel pdf = new PdfModel();
+        pdf.setId(person.getId());
         pdf.setFirstName(person.getFirstName());
         pdf.setLastName(person.getLastName());
         pdf.setEmail(person.getEmail());
